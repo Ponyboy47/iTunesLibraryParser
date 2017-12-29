@@ -180,26 +180,40 @@ enum ContentKind: Decodable {
     case audio(AudioContentKind)
     case video(VideoContentKind)
     case none
+    indirect case protected(ContentKind)
 
     init(from decoder: Decoder) throws {
         var rawValue = try decoder.singleValueContainer().decode(String.self)
         rawValue = rawValue.replacingOccurrences(of: "Purchased ", with: "")
         rawValue = rawValue.replacingOccurrences(of: "Matched ", with: "")
-        rawValue = rawValue.replacingOccurrences(of: "Protected ", with: "")
         rawValue = rawValue.replacingOccurrences(of: " file", with: "")
         rawValue = rawValue.replacingOccurrences(of: "-", with: "")
         rawValue = rawValue.replacingOccurrences(of: "Apple Music ", with: "")
 
+        let old = rawValue
+        rawValue = rawValue.replacingOccurrences(of: "Protected ", with: "")
+        var protected = false
+        if old != rawValue {
+            protected = true
+        }
+
+        var kind: ContentKind
         if rawValue.hasSuffix(" audio") {
-            self = .audio(AudioContentKind(rawValue: rawValue.replacingOccurrences(of: " audio", with: "").lowercased())!)
+            kind = .audio(AudioContentKind(rawValue: rawValue.replacingOccurrences(of: " audio", with: "").lowercased())!)
         } else if rawValue.hasSuffix(" video") {
-            self = .video(VideoContentKind(rawValue: rawValue.replacingOccurrences(of: " video", with: "").lowercased())!)
+            kind = .video(VideoContentKind(rawValue: rawValue.replacingOccurrences(of: " video", with: "").lowercased())!)
         } else if rawValue.hasSuffix(" stream") {
-            self = .audio(.stream)
+            kind = .audio(.stream)
         } else if rawValue == "Ringtone" {
-            self = .audio(.ringtone)
+            kind = .audio(.ringtone)
         } else {
             fatalError("Unknown kind: '\(rawValue)'")
+        }
+
+        if protected {
+            self = .protected(kind)
+        } else {
+            self = kind
         }
     }
 }
