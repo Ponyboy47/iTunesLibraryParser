@@ -21,10 +21,10 @@ public enum iTunesLibraryError: Error {
 }
 
 public class iTunesLibrary: Decodable {
-    let applicationVersion: String
-    let date: Date
-    let persistentID: String
-    let tracks: [Int: iTunesLibraryContent]
+    public let applicationVersion: String
+    public let date: Date
+    public let persistentID: String
+    public let tracks: [Int: iTunesLibraryContent]
 
     enum CodingKeys: String, CodingKey {
         case applicationVersion = "Application Version"

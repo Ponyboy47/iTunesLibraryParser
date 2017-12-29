@@ -8,52 +8,52 @@
 import Foundation
 import FileKit
 
-class iTunesLibraryContent: Decodable {
-    var trackID: UInt
-    var persistentID: String
-    var type: ContentType
-    var size: UInt?
-    var duration: UInt?
-    var year: UInt?
-    var modified: Date?
-    var added: Date?
-    var bitRate: UInt?
-    var sampleRate: UInt?
-    var playCount: UInt
-    var lastPlayedOn: Date?
-    var skipCount: UInt?
-    var lastSkippedOn: Date?
-    var releaseDate: Date?
-    var musicVideo: Bool
-    var hasVideo: Bool
-    var movie: Bool
-    var purchased: Bool
-    var matched: Bool
-    var podcast: Bool
-    var unplayed: Bool
-    var appleMusic: Bool
-    var playlistOnly: Bool
-    var explicit: Bool
-    var name: String?
-    var sortName: String?
-    var artist: String?
-    var sortArtist: String?
-    var albumArtist: String?
-    var sortAlbumArtist: String?
-    var album: String?
-    var sortAlbum: String?
-    var composer: String?
-    var sortComposer: String?
-    var grouping: String?
-    var genre: String?
-    var kind: ContentKind
-    var location: Path?
-    var comments: String?
-    var rating: ContentRating?
-    var discNumber: UInt?
-    var discCount: UInt?
-    var trackNumber: UInt?
-    var trackCount: UInt?
+public class iTunesLibraryContent: Decodable {
+    public var trackID: UInt
+    public var persistentID: String
+    public var type: ContentType
+    public var size: UInt?
+    public var duration: UInt?
+    public var year: UInt?
+    public var modified: Date?
+    public var added: Date?
+    public var bitRate: UInt?
+    public var sampleRate: UInt?
+    public var playCount: UInt
+    public var lastPlayedOn: Date?
+    public var skipCount: UInt?
+    public var lastSkippedOn: Date?
+    public var releaseDate: Date?
+    public var musicVideo: Bool
+    public var hasVideo: Bool
+    public var movie: Bool
+    public var purchased: Bool
+    public var matched: Bool
+    public var podcast: Bool
+    public var unplayed: Bool
+    public var appleMusic: Bool
+    public var playlistOnly: Bool
+    public var explicit: Bool
+    public var name: String?
+    public var sortName: String?
+    public var artist: String?
+    public var sortArtist: String?
+    public var albumArtist: String?
+    public var sortAlbumArtist: String?
+    public var album: String?
+    public var sortAlbum: String?
+    public var composer: String?
+    public var sortComposer: String?
+    public var grouping: String?
+    public var genre: String?
+    public var kind: ContentKind
+    public var location: Path?
+    public var comments: String?
+    public var rating: ContentRating?
+    public var discNumber: UInt?
+    public var discCount: UInt?
+    public var trackNumber: UInt?
+    public var trackCount: UInt?
 
     enum CodingKeys: String, CodingKey {
         case trackID = "Track ID"
@@ -103,7 +103,7 @@ class iTunesLibraryContent: Decodable {
         case trackCount = "Track Count"
     }
 
-    required init(from decoder: Decoder) throws {
+    required public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         trackID = try container.decode(UInt.self, forKey: .trackID)
@@ -157,13 +157,13 @@ class iTunesLibraryContent: Decodable {
     }
 }
 
-enum ContentType: String, Decodable {
+public enum ContentType: String, Decodable {
     case file = "File"
     case remote = "Remote"
     case url = "URL"
 }
 
-enum AudioContentKind: String, Decodable {
+public enum AudioContentKind: String, Decodable {
     case mpeg
     case mpeg4
     case aac
@@ -172,17 +172,17 @@ enum AudioContentKind: String, Decodable {
     case ringtone
 }
 
-enum VideoContentKind: String, Decodable {
+public enum VideoContentKind: String, Decodable {
     case mpeg4
 }
 
-enum ContentKind: Decodable {
+public enum ContentKind: Decodable {
     case audio(AudioContentKind)
     case video(VideoContentKind)
     case none
     indirect case protected(ContentKind)
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         var rawValue = try decoder.singleValueContainer().decode(String.self)
         rawValue = rawValue.replacingOccurrences(of: "Purchased ", with: "")
         rawValue = rawValue.replacingOccurrences(of: "Matched ", with: "")
@@ -218,19 +218,19 @@ enum ContentKind: Decodable {
     }
 }
 
-struct ContentRating: Decodable {
-    let organization: String
-    let rating: Rating
-    let reason: String
+public struct ContentRating: Decodable {
+    public let organization: String
+    public let rating: Rating
+    public let reason: String
 
-    enum Rating: String {
+    public enum Rating: String {
         case g
         case pg
         case pg13
         case r
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
 
         let str = try container.decode(String.self)
